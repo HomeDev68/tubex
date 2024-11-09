@@ -165,15 +165,15 @@ def result():
         'results': len(res),
         'items': [{
             'thumbnail': f'./thumbnail?url={encode_url(e.get("thumbnail", ""))}&encoded=1' if e.get("thumbnail") else '',
-            'id': e['id'],
-            'title': e['title'],
+            'id': e.get('id', ''),
+            'title': e.get('title', ''),
             'type': 'video',
-            'duration': e['duration'],
-            'views': e['view_count'],
+            'duration': e.get('duration', 0),
+            'views': e.get('view_count', 0),
             'uploadedAt': e.get('upload_date', ''),
-            'author': e['uploader'],
-            'description': e['description']
-        } for e in res if e['duration']]
+            'author': e.get('uploader', ''),
+            'description': e.get('description', '')
+        } for e in res if e.get('duration', 0)]
     }
     return create_page(keyword, keyword, create_result_content(result))
 
