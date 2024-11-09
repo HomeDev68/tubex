@@ -170,7 +170,7 @@ def result():
             'type': 'video',
             'duration': e['duration'],
             'views': e['view_count'],
-            'uploadedAt': e['upload_date'],
+            'uploadedAt': e.get('upload_date', ''),
             'author': e['uploader'],
             'description': e['description']
         } for e in res if e['duration']]
