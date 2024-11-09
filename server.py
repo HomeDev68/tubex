@@ -232,5 +232,5 @@ def download(url, name):
     return send_file(BytesIO(res.content), mimetype=res.headers['Content-Type'], as_attachment=True, attachment_filename=name)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=80, debug=True)
 # app.run(host='0.0.0.0', port=80, ssl_context=('app.crt', 'app.key'))
