@@ -1,23 +1,23 @@
 # TubeX
-A forward proxy to YouTube written in nodejs based on videojs, koa, axios, ytsr and ytdl-core.
+A forward proxy to YouTube written in Python using Flask, requests, and pytube.
 
-## Intoduction
+## Introduction
 By deploying this tiny forward proxy on your VPS as a website, you can:
-* search and watch youtube videos without reverse proxy;
-* watch youtube videos online without ads;
-* watch youtube videos with accelerated play rates;
-* watch/download youtube videos in different qualities (360p/720p).
+* search and watch YouTube videos without reverse proxy;
+* watch YouTube videos online without ads;
+* watch YouTube videos with accelerated play rates;
+* watch/download YouTube videos in different qualities (360p/720p).
 
 ## Usage
-Install TubeX by npm:
-* npm i tubex
-* cd ~/node_modules/tubex
+Install TubeX by pip:
+* pip install flask requests pytube
+* cd ~/tubex
 
 Put your app.key and app.crt in this folder, or create a self-signed certificate with openssl:
 * openssl req -x509 -sha256 -nodes -days 3650 -newkey rsa:2048 -keyout app.key -out app.crt
 
-Then start server in background:
-* sudo nohup ./server.js >> tubex.log 2>&1 &
+Then start the server in the background:
+* sudo nohup python3 server.py >> tubex.log 2>&1 &
 
 Now you can access your website in browsers.
 
