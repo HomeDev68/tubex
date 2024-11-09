@@ -39,7 +39,7 @@ def create_table(arr, caption):
     rows = [f'<tr>{first}</tr>']
     for r in arr:
         line = ''.join([f'<td>{e or ""}</td>' for e in r.values()])
-        rows.append(f'<tr>{line}</tr>'])
+        rows.append(f'<tr>{line}</tr>')
     return f"""
     <table style="word-wrap:break-word">
         {f'<caption><h4>{caption}</h4></caption>' if caption else ''}

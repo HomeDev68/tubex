@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "build": "pip install flask yt-dlp requests",
+    "launch": "python server.py"
+  }
+}
