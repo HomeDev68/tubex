@@ -133,13 +133,14 @@ def decode_url(str):
     return zlib.decompress(base64.urlsafe_b64decode(str.encode())).decode()
 
 def sec_to_str(sec):
+    sec = float(sec)
     if sec < 10:
-        return f'0:0{sec}'
+        return f'0:0{int(sec)}'
     if sec < 60:
-        return f'0:{sec}'
+        return f'0:{int(sec)}'
     if sec < 3600:
-        return f'{sec // 60}:{sec % 60:02d}'
-    return f'{sec // 3600}:{sec % 3600 // 60:02d}:{sec % 60:02d}'
+        return f'{int(sec // 60)}:{int(sec % 60):02d}'
+    return f'{int(sec // 3600)}:{int(sec % 3600 // 60):02d}:{int(sec % 60):02d}'
 
 @app.route('/')
 def index():
