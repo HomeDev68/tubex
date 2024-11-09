@@ -1,5 +1,5 @@
 # TubeX
-A forward proxy to YouTube written in Python using Flask, requests, and pytube.
+A forward proxy to YouTube written in Python using Flask, requests, and yt-dlp.
 
 ## Introduction
 By deploying this tiny forward proxy on your VPS as a website, you can:
@@ -10,7 +10,7 @@ By deploying this tiny forward proxy on your VPS as a website, you can:
 
 ## Usage
 Install TubeX by pip:
-* pip install flask requests pytube
+* pip install flask requests yt-dlp
 * cd ~/tubex
 
 Put your app.key and app.crt in this folder, or create a self-signed certificate with openssl:

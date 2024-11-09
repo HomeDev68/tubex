@@ -1,5 +1,5 @@
 from flask import Flask, request, redirect, send_file
-from pytube import YouTube, Search
+from yt_dlp import YoutubeDL
 import requests
 import zlib
 import base64
@@ -39,7 +39,7 @@ def create_table(arr, caption):
     rows = [f'<tr>{first}</tr>']
     for r in arr:
         line = ''.join([f'<td>{e or ""}</td>' for e in r.values()])
-        rows.append(f'<tr>{line}</tr>')
+        rows.append(f'<tr>{line}</tr>'])
     return f"""
     <table style="word-wrap:break-word">
         {f'<caption><h4>{caption}</h4></caption>' if caption else ''}
@@ -152,22 +152,28 @@ def result():
     t = request.args.get('t')
     if t == 'id':
         return redirect(f'/watch?v={keyword}')
-    search = Search(keyword)
-    res = search.results
+    ydl_opts = {
+        'format': 'best',
+        'noplaylist': True,
+        'quiet': True,
+        'extract_flat': True
+    }
+    with YoutubeDL(ydl_opts) as ydl:
+        res = ydl.extract_info(f"ytsearch:{keyword}", download=False)['entries']
     result = {
         'original': keyword,
         'results': len(res),
         'items': [{
-            'thumbnail': f'./thumbnail?url={encode_url(e.thumbnail_url)}&encoded=1',
-            'id': e.video_id,
-            'title': e.title,
+            'thumbnail': f'./thumbnail?url={encode_url(e["thumbnail"])}&encoded=1',
+            'id': e['id'],
+            'title': e['title'],
             'type': 'video',
-            'duration': e.length,
-            'views': e.views,
-            'uploadedAt': e.publish_date,
-            'author': e.author,
-            'description': e.description
-        } for e in res if e.length]
+            'duration': e['duration'],
+            'views': e['view_count'],
+            'uploadedAt': e['upload_date'],
+            'author': e['uploader'],
+            'description': e['description']
+        } for e in res if e['duration']]
     }
     return create_page(keyword, keyword, create_result_content(result))
 
@@ -176,33 +182,39 @@ def watch():
     id = request.args.get('v')
     if not id:
         return redirect('/')
-    yt = YouTube(f'https://www.youtube.com/watch?v={id}')
+    ydl_opts = {
+        'format': 'best',
+        'noplaylist': True,
+        'quiet': True
+    }
+    with YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(f'https://www.youtube.com/watch?v={id}', download=False)
     video = {
-        'title': yt.title,
-        'poster': f'./thumbnail?url={yt.thumbnail_url}',
-        'duration': yt.length,
-        'views': yt.views,
-        'date': yt.publish_date,
-        'author': yt.author,
-        'description': yt.description,
+        'title': info['title'],
+        'poster': f'./thumbnail?url={info["thumbnail"]}',
+        'duration': info['duration'],
+        'views': info['view_count'],
+        'date': info['upload_date'],
+        'author': info['uploader'],
+        'description': info['description'],
         'formats': [{
-            'url': stream.url,
-            'container': stream.mime_type.split('/')[1],
-            'mimeType': stream.mime_type,
-            'qualityLabel': stream.resolution,
-            'contentLength': stream.filesize,
-            'width': stream.resolution.split('x')[0],
-            'height': stream.resolution.split('x')[1]
-        } for stream in yt.streams.filter(progressive=True)],
+            'url': f'https://www.youtube.com/watch?v={id}',
+            'container': f'{info["ext"]}',
+            'mimeType': f'video/{info["ext"]}',
+            'qualityLabel': f'{info["height"]}p',
+            'contentLength': f'{info["filesize"]}',
+            'width': f'{info["width"]}',
+            'height': f'{info["height"]}'
+        }],
         'related': [{
-            'thumbnail': f'./thumbnail?url={encode_url(e.thumbnail_url)}&encoded=1',
-            'id': e.video_id,
-            'title': e.title,
-            'duration': e.length,
-            'views': e.views,
-            'published': e.publish_date,
-            'author': e.author
-        } for e in yt.related_videos]
+            'thumbnail': f'./thumbnail?url={encode_url(e["thumbnail"])}&encoded=1',
+            'id': e['id'],
+            'title': e['title'],
+            'duration': e['duration'],
+            'views': e['view_count'],
+            'published': e['upload_date'],
+            'author': e['uploader']
+        } for e in info['related']]
     }
     return create_page(video['title'], None, create_watch_content(video))
 
