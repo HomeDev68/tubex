@@ -67,7 +67,7 @@ def create_page(title, keyword, extra):
 def create_result_content(result):
     arr = [{
         'thumbnail': f'<img width="180" height="101" src="{e["thumbnail"]}" />',
-        'detail': f'<p><a href="./watch?v={e["id"]}"><h4>{e["title"]}</h4></a></p><p>{e["type"]}&emsp;<b>{e["duration"]}</b>&emsp;{e["views"]} views&emsp;{e["uploadedAt"]}&emsp;@<b>{e["author"]}</b></p><p>{e["description"] or ""}</p>'
+        'detail': f'<p><a href="./watch?v={e["id"]}"><h4>{e["title"]}</h4></a></p><p>{e["type"]}&emsp;<b>{sec_to_str(e["duration"])}</b>&emsp;{e["views"]} views&emsp;{e["uploadedAt"]}&emsp;@<b>{e["author"]}</b></p><p>{e["description"] or ""}</p>'
     } for e in result['items']]
     return f"""
     <center>
