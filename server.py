@@ -3,6 +3,7 @@ from yt_dlp import YoutubeDL
 import requests
 import zlib
 import base64
+import json
 from io import BytesIO
 
 app = Flask(__name__)
@@ -72,7 +73,7 @@ def create_result_content(result):
     <center>
         <h3>{result['original']}:</h3>
         <p>{result['results']} results</p>
-        {create_table(arr)}
+        {create_table(arr, 'Search Results')}
     </center>
     """
 
