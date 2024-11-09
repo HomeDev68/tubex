@@ -164,7 +164,7 @@ def result():
         'original': keyword,
         'results': len(res),
         'items': [{
-            'thumbnail': f'./thumbnail?url={encode_url(e["thumbnail"])}&encoded=1',
+            'thumbnail': f'./thumbnail?url={encode_url(e.get("thumbnail", ""))}&encoded=1' if e.get("thumbnail") else '',
             'id': e['id'],
             'title': e['title'],
             'type': 'video',
